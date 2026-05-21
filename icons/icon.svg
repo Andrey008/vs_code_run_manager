@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#334155"/>
+      <stop offset="1" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="play" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/>
+      <stop offset="1" stop-color="#16A34A"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="256" height="256" rx="60" fill="url(#bg)"/>
+
+  <g transform="translate(49,44) scale(7)">
+    <!-- Three service nodes -->
+    <circle cx="3" cy="6"  r="2.5" fill="#F1F5F9"/>
+    <circle cx="3" cy="12" r="2.5" fill="#F1F5F9"/>
+    <circle cx="3" cy="18" r="2.5" fill="#F1F5F9"/>
+
+    <!-- Connections flowing into the run button -->
+    <path stroke="#94A3B8" stroke-width="1.6" stroke-linecap="round" fill="none"
+          d="M5.5 6.5L9.5 9.5M5.5 12H9.5M5.5 17.5L9.5 14.5"/>
+
+    <!-- Run button -->
+    <path d="M10 6.5L22 12L10 17.5V6.5Z" fill="url(#play)"/>
+  </g>
+</svg>
