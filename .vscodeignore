@@ -20,6 +20,7 @@ tsconfig*.json
 # Editor / agent / internal docs
 .vscode/**
 .claude/**
+.gstack/**
 SPEC.md
 TODOS.md
 SERVICE_MANAGER_EXTENSION.md
