@@ -1,0 +1,92 @@
+{
+  "name": "run-manager",
+  "displayName": "Run Manager",
+  "description": "Unified panel for launching, monitoring, and stopping local services — better than IntelliJ Services panel",
+  "version": "1.0.0",
+  "publisher": "run-manager",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Andrey008/vs_code_run_manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Andrey008/vs_code_run_manager/issues"
+  },
+  "homepage": "https://github.com/Andrey008/vs_code_run_manager#readme",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "services",
+    "service manager",
+    "process manager",
+    "tasks",
+    "docker compose",
+    "runner"
+  ],
+  "activationEvents": [
+    "workspaceContains:.vscode/launch.json",
+    "workspaceContains:.vscode/tasks.json",
+    "workspaceContains:.vscode/services.json"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "run-manager",
+          "title": "Run Manager",
+          "icon": "icons/run-manager.svg"
+        }
+      ]
+    },
+    "views": {
+      "run-manager": [
+        {
+          "type": "webview",
+          "id": "runManager.panel",
+          "name": "Services"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "runManager.openPanel",
+        "title": "Run Manager: Focus Panel"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build:extension": "node esbuild.extension.js",
+    "build:webview": "node esbuild.webview.js",
+    "build": "npm run build:extension && npm run build:webview",
+    "watch:extension": "node esbuild.extension.js --watch",
+    "watch:webview": "node esbuild.webview.js --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:integration": "node ./out/test/runTests.js",
+    "lint": "tsc --noEmit",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-electron": "^2.3.9",
+    "@vscode/vsce": "^3.9.1",
+    "@xterm/xterm": "^5.3.0",
+    "esbuild": "^0.20.1",
+    "jest": "^29.7.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3"
+  }
+}

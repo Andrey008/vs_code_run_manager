@@ -1,0 +1,26 @@
+# Dependencies & build output
+node_modules/
+dist/
+out/
+webview/dist/
+*.vsix
+
+# Secrets
+.env.local
+.env.*.local
+
+# Test & coverage artifacts
+coverage/
+*.js.map
+
+# Designs, specs, internal docs — not part of the released extension
+SPEC.md
+TODOS.md
+SERVICE_MANAGER_EXTENSION.md
+
+# Local VS Code dev/test settings & fixtures
+.vscode/
+test-workspace/
+
+# Claude agent local files
+.claude/

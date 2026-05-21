@@ -1,0 +1,26 @@
+# Sources — the extension ships bundled output only (dist/, webview/dist/)
+src/**
+webview/src/**
+__mocks__/**
+node_modules/**
+
+# Tests, coverage, fixtures
+**/*.test.ts
+test-workspace/**
+coverage/**
+
+# Build & tooling config
+esbuild.*.js
+jest.config.js
+tsconfig*.json
+**/*.map
+.gitignore
+.vscodeignore
+
+# Editor / agent / internal docs
+.vscode/**
+.claude/**
+SPEC.md
+TODOS.md
+SERVICE_MANAGER_EXTENSION.md
+package-lock.json
