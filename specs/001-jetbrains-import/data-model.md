@@ -72,7 +72,7 @@ configuration reappears.
 | Field | Type | Notes |
 |-------|------|-------|
 | `entries` | `ImportReportEntry[]` | One per discovered configuration (FR-017 — no silent drops). |
-| `counts` | `{ imported: number; needsReview: number; skipped: number; stale: number }` | Summary shown in the notification. |
+| `counts` | `{ imported: number; updated: number; needsReview: number; skipped: number; stale: number }` | Summary shown in the notification. |
 | `aborted` | `boolean` | `true` when the write was aborted (e.g. malformed `services.json`, FR-015). |
 | `abortReason` | `string \| undefined` | Set when `aborted` is `true`. |
 

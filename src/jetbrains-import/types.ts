@@ -62,6 +62,7 @@ export interface ImportReport {
   entries: ImportReportEntry[];
   counts: {
     imported: number;
+    updated: number;
     needsReview: number;
     skipped: number;
     stale: number;

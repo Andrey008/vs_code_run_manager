@@ -116,9 +116,10 @@ function presentReport(report: ImportReport): void {
     return;
   }
 
-  const { imported, needsReview, skipped } = report.counts;
+  const { imported, updated, needsReview, skipped, stale } = report.counts;
   vscode.window.showInformationMessage(
-    `Run Manager: imported ${imported}, needs review ${needsReview}, skipped ${skipped}. ` +
+    `Run Manager: imported ${imported}, updated ${updated}, needs review ${needsReview}, ` +
+      `skipped ${skipped}, stale ${stale}. ` +
       'See the "Run Manager: JetBrains Import" output channel for details.',
   );
 }

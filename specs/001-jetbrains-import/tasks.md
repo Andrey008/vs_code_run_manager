@@ -111,12 +111,12 @@ added, the orphan marked stale, hand-written services untouched, and no duplicat
 
 ### Tests for User Story 3 ⚠️ (write first, confirm they FAIL)
 
-- [ ] T019 [P] [US3] Extend `src/jetbrains-import/merge.test.ts` with smart-sync cases — re-import matches by `source`+`originId` and updates in place, adds new configs, marks orphaned imported services `stale`, never duplicates, never modifies hand-written services
+- [X] T019 [P] [US3] Extend `src/jetbrains-import/merge.test.ts` with smart-sync cases — re-import matches by `source`+`originId` and updates in place, adds new configs, marks orphaned imported services `stale`, never duplicates, never modifies hand-written services
 
 ### Implementation for User Story 3
 
-- [ ] T020 [US3] Extend merge in `src/jetbrains-import/merge.ts` with smart-sync — match existing services by `source`+`originId`, update in place, add new, mark orphaned imported services `stale: true` without deleting (FR-011, FR-018) (depends on T013)
-- [ ] T021 [US3] Update `src/jetbrains-import/importCommand.ts` so the report distinguishes `updated` and `stale` outcomes (depends on T014, T020)
+- [X] T020 [US3] Extend merge in `src/jetbrains-import/merge.ts` with smart-sync — match existing services by `source`+`originId`, update in place, add new, mark orphaned imported services `stale: true` without deleting (FR-011, FR-018) (depends on T013)
+- [X] T021 [US3] Update `src/jetbrains-import/importCommand.ts` so the report distinguishes `updated` and `stale` outcomes (depends on T014, T020)
 
 **Checkpoint**: Re-import is idempotent and safe; all three stories work independently.
 
