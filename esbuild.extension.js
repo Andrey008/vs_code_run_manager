@@ -11,6 +11,10 @@ const options = {
   format: 'cjs',
   platform: 'node',
   target: 'node20',
+  // Prefer ESM builds of dependencies: jsonc-parser's UMD `main` uses a factory
+  // `require` parameter that esbuild cannot bundle, leaving a broken runtime
+  // `require('./impl/format')`. Its ESM `module` build bundles cleanly.
+  mainFields: ['module', 'main'],
   sourcemap: true,
   minify: false,
 };
