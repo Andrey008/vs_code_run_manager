@@ -93,7 +93,7 @@ previous import, and verify Run Manager shows the import notification.
 
 ### Implementation for User Story 2
 
-- [ ] T017 [US2] Implement activation gating in `src/jetbrains-import/activation.ts` — detect `.idea/`, read `workspaceState` flags, show the Import / Not now / Never notification (depends on T004)
+- [ ] T017 [US2] Implement activation gating in `src/jetbrains-import/activation.ts` — detect `.idea/`, scan for run configurations and require at least one discovered, read `workspaceState` flags, then show the Import / Not now / Never notification (depends on T004, T010, T011)
 - [ ] T018 [US2] Wire the activation prompt into `activate()` in `src/extension.ts` — invoke the pipeline on Import, set `jetbrainsImport.done` on success and `jetbrainsImport.dismissed` on Never (depends on T014, T017)
 
 **Checkpoint**: Opening a JetBrains workspace surfaces the import prompt; US1 still works.

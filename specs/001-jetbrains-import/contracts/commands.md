@@ -23,9 +23,10 @@ The interfaces this feature exposes to the user through VS Code.
 
 **Trigger**: extension `activate()`.
 
-**Precondition to show**: a `.idea/` directory exists in the workspace AND
-`context.workspaceState` has neither `jetbrainsImport.done` nor
-`jetbrainsImport.dismissed` set.
+**Precondition to show**: a `.idea/` directory exists in the workspace, **at least one
+run configuration is discovered** within it, AND `context.workspaceState` has neither
+`jetbrainsImport.done` nor `jetbrainsImport.dismissed` set. (The notification text states
+the discovered count, so a non-zero count is required — matches spec FR-002.)
 
 **UI**: an information notification — *"Run Manager found N JetBrains run configurations.
 Import them?"* — with three actions:
