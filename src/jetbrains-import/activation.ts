@@ -25,25 +25,26 @@ export async function maybeOfferImport(
   context: vscode.ExtensionContext,
   workspaceFolder: string,
 ): Promise<void> {
-  const configCount = discoverMappedServices(workspaceFolder).length;
-  const offer = shouldOfferImport({
-    hasConfigs: configCount > 0,
-    done: context.workspaceState.get<boolean>(DONE_KEY) === true,
-    dismissed: context.workspaceState.get<boolean>(DISMISSED_KEY) === true,
-  });
-  if (!offer) {
+  const done = context.workspaceState.get<boolean>(DONE_KEY) === true;
+  const dismissed = context.workspaceState.get<boolean>(DISMISSED_KEY) === true;
+  if (done || dismissed) {
+    return; // settled for this workspace — skip the filesystem scan entirely
+  }
+
+  const mapped = discoverMappedServices(workspaceFolder);
+  if (!shouldOfferImport({ hasConfigs: mapped.length > 0, done, dismissed })) {
     return;
   }
 
   const choice = await vscode.window.showInformationMessage(
-    `Run Manager found ${configCount} JetBrains run configuration${configCount === 1 ? '' : 's'}. Import them?`,
+    `Run Manager found ${mapped.length} JetBrains run configuration${mapped.length === 1 ? '' : 's'}. Import them?`,
     'Import',
     'Not now',
     'Never',
   );
 
   if (choice === 'Import') {
-    const written = await runImport(workspaceFolder);
+    const written = await runImport(workspaceFolder, mapped);
     if (written) {
       await context.workspaceState.update(DONE_KEY, true);
     }

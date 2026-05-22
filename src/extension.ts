@@ -5,7 +5,7 @@ import { LaunchRunner } from './runners/LaunchRunner';
 import { TaskRunner } from './runners/TaskRunner';
 import { DockerRunner } from './runners/DockerRunner';
 import { LogManager } from './managers/LogManager';
-import { importFromJetBrainsCommand } from './jetbrains-import/importCommand';
+import { importFromJetBrainsCommand, disposeImportResources } from './jetbrains-import/importCommand';
 import { maybeOfferImport } from './jetbrains-import/activation';
 
 export function activate(context: vscode.ExtensionContext): void {
@@ -27,6 +27,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('runManager.importFromJetBrains', () =>
       importFromJetBrainsCommand(),
     ),
+    { dispose: disposeImportResources },
     { dispose: () => logManager.dispose() },
     { dispose: () => launchRunner.dispose() },
     { dispose: () => taskRunner.dispose() },

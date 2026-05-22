@@ -49,8 +49,11 @@ function applyEnv(config: JetBrainsRunConfig, service: ServiceConfig, notes: str
   if (config.envFile) {
     service.envFile = resolveVars(config.envFile);
   }
-  if (Object.keys(config.envVars).length > 0) {
-    notes.push('Inline environment variables were not applied — set them via an env file.');
+  const inlineVars = Object.keys(config.envVars);
+  if (inlineVars.length > 0) {
+    notes.push(
+      `Inline environment variables (${inlineVars.join(', ')}) were not applied — set them via an env file.`,
+    );
   }
 }
 
@@ -71,8 +74,9 @@ const shBuilder: Builder = (config, id, originId) => {
 const npmBuilder: Builder = (config, id, originId) => {
   const o = config.options;
   const cmd = join(['npm', o['command'] ?? 'run', o['script'] ?? '']);
+  const workdir = dirOf(resolveVars(o['package-json'] ?? '')) || '${workspaceFolder}';
   return {
-    service: shell(id, config.name, originId, cmd, '${workspaceFolder}'),
+    service: shell(id, config.name, originId, cmd, workdir),
     confidence: 'clean',
     notes: [],
   };
@@ -120,7 +124,7 @@ const dockerBuilder: Builder = (config, id, originId) => {
       id,
       name: config.name,
       type: 'docker-compose',
-      file: resolveVars(o['sourceFilePath']),
+      file: workspaceRelative(resolveVars(o['sourceFilePath'])),
       service: splitList(o['servicesNames'])[0] ?? '',
       source: 'jetbrains',
       originId,
@@ -192,4 +196,18 @@ function splitList(value: string | undefined): string[] {
 
 function slugify(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+/** Directory portion of a path, or '' when there is no separator. */
+function dirOf(filePath: string): string {
+  const idx = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'));
+  return idx >= 0 ? filePath.slice(0, idx) : '';
+}
+
+/** Anchor a relative path to the workspace so Run Manager can resolve it. */
+function workspaceRelative(filePath: string): string {
+  if (filePath === '' || filePath.startsWith('${workspaceFolder}') || filePath.startsWith('/')) {
+    return filePath;
+  }
+  return `\${workspaceFolder}/${filePath}`;
 }

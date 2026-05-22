@@ -16,6 +16,12 @@ function channel(): vscode.OutputChannel {
   return outputChannel;
 }
 
+/** Dispose the importer's output channel. Registered in the extension's subscriptions. */
+export function disposeImportResources(): void {
+  outputChannel?.dispose();
+  outputChannel = undefined;
+}
+
 /** Discover and map every JetBrains run configuration found in the workspace. */
 export function discoverMappedServices(workspaceFolder: string): MappedService[] {
   const rawFiles = scanJetBrainsConfigs(workspaceFolder);
@@ -42,8 +48,11 @@ export async function importFromJetBrainsCommand(): Promise<void> {
  * Run the full import: discover → preview → merge → report.
  * Returns true when an import was successfully written.
  */
-export async function runImport(workspaceFolder: string): Promise<boolean> {
-  const mapped = discoverMappedServices(workspaceFolder);
+export async function runImport(
+  workspaceFolder: string,
+  preDiscovered?: MappedService[],
+): Promise<boolean> {
+  const mapped = preDiscovered ?? discoverMappedServices(workspaceFolder);
   if (mapped.length === 0) {
     vscode.window.showInformationMessage(
       'Run Manager: no JetBrains run configurations found in this workspace.',

@@ -123,4 +123,14 @@ describe('mergeImport — re-import (smart sync)', () => {
     expect(report.counts.stale).toBe(1);
     expect(fs.readFileSync(file, 'utf-8')).toContain('"stale": true');
   });
+
+  it('clears the stale flag when a vanished source configuration reappears', () => {
+    const file = tmpFile('services-prior-import.jsonc');
+    mergeImport(file, []); // start-api loses its source — becomes stale
+    expect(fs.readFileSync(file, 'utf-8')).toContain('"stale": true');
+
+    const report = mergeImport(file, [mapped('start-api', 'Start API', ORIGIN)]);
+    expect(report.counts.updated).toBe(1);
+    expect(fs.readFileSync(file, 'utf-8')).not.toContain('"stale": true');
+  });
 });

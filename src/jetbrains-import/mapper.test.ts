@@ -52,4 +52,25 @@ describe('mapConfig', () => {
     expect(m.confidence).toBe('unmapped');
     expect(m.service).toBeNull();
   });
+
+  it('flags a non-Compose docker-deploy as needs-review', () => {
+    const m = mapConfig(config('docker-deploy', {}));
+    expect(m.confidence).toBe('needs-review');
+    expect(m.service?.type).toBe('shell');
+  });
+
+  it('resolves a referenced env file onto the service', () => {
+    const cfg = config('ShConfigurationType', { SCRIPT_PATH: '$PROJECT_DIR$/x.sh' });
+    cfg.envFile = '$PROJECT_DIR$/.env.local';
+    expect(mapConfig(cfg).service?.envFile).toBe('${workspaceFolder}/.env.local');
+  });
+
+  it('derives the npm working directory from the package.json location', () => {
+    const m = mapConfig(config('js.build_tools.npm', {
+      command: 'run',
+      script: 'build',
+      'package-json': '$PROJECT_DIR$/apps/web/package.json',
+    }));
+    expect((m.service as ShellServiceConfig).cwd).toBe('${workspaceFolder}/apps/web');
+  });
 });
