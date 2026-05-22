@@ -30,8 +30,8 @@ Single project. New module at `src/jetbrains-import/`; unit tests co-located as
 
 **Purpose**: Dependencies and module skeleton.
 
-- [ ] T001 Add `fast-xml-parser` and `jsonc-parser` to `dependencies` in `package.json` and run `npm install`
-- [ ] T002 [P] Create the module folders `src/jetbrains-import/` and `src/jetbrains-import/__fixtures__/`
+- [X] T001 Add `fast-xml-parser` and `jsonc-parser` to `dependencies` in `package.json` and run `npm install`
+- [X] T002 [P] Create the module folders `src/jetbrains-import/` and `src/jetbrains-import/__fixtures__/`
 
 ---
 
@@ -41,9 +41,9 @@ Single project. New module at `src/jetbrains-import/`; unit tests co-located as
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T003 Add optional `source`, `originId`, and `stale` fields to `ServiceConfigBase` in `src/types.ts`
-- [ ] T004 Define importer types (`JetBrainsRunConfig`, `MappingConfidence`, `MappedService`, `ImportReportEntry`, `ImportReport`) in `src/jetbrains-import/types.ts` (depends on T003)
-- [ ] T005 [P] Create unit-test fixtures in `src/jetbrains-import/__fixtures__/` — one `.idea` run-config XML per JetBrains type, one malformed XML file, and `services.json` samples (empty, with comments, with a prior import)
+- [X] T003 Add optional `source`, `originId`, and `stale` fields to `ServiceConfigBase` in `src/types.ts`
+- [X] T004 Define importer types (`JetBrainsRunConfig`, `MappingConfidence`, `MappedService`, `ImportReportEntry`, `ImportReport`) in `src/jetbrains-import/types.ts` (depends on T003)
+- [X] T005 [P] Create unit-test fixtures in `src/jetbrains-import/__fixtures__/` — one `.idea` run-config XML per JetBrains type, one malformed XML file, and `services.json` samples (empty, with comments, with a prior import)
 
 **Checkpoint**: Foundation ready — user story implementation can begin.
 
@@ -61,19 +61,19 @@ configurations exist as runnable services in `.vscode/services.json`.
 
 ### Tests for User Story 1 ⚠️ (write first, confirm they FAIL)
 
-- [ ] T006 [P] [US1] Unit tests for the scanner in `src/jetbrains-import/scanner.test.ts` — finds `runConfigurations/*.xml` and `workspace.xml`, tags provenance, handles a missing `.idea/`
-- [ ] T007 [P] [US1] Unit tests for the parser in `src/jetbrains-import/parser.test.ts` — each type fixture parses to a `JetBrainsRunConfig`, default template entries are skipped, malformed XML yields null
-- [ ] T008 [P] [US1] Unit tests for the mapper in `src/jetbrains-import/mapper.test.ts` — clean / needs-review / unmapped confidence per type and correct command construction (per `research.md` R4)
-- [ ] T009 [P] [US1] Unit tests for first-import merge in `src/jetbrains-import/merge.test.ts` — writes a `JetBrains` group, preserves existing services and comments, creates the file when absent, suffixes a colliding `id`, aborts on malformed `services.json`
+- [X] T006 [P] [US1] Unit tests for the scanner in `src/jetbrains-import/scanner.test.ts` — finds `runConfigurations/*.xml` and `workspace.xml`, tags provenance, handles a missing `.idea/`
+- [X] T007 [P] [US1] Unit tests for the parser in `src/jetbrains-import/parser.test.ts` — each type fixture parses to a `JetBrainsRunConfig`, default template entries are skipped, malformed XML yields null
+- [X] T008 [P] [US1] Unit tests for the mapper in `src/jetbrains-import/mapper.test.ts` — clean / needs-review / unmapped confidence per type and correct command construction (per `research.md` R4)
+- [X] T009 [P] [US1] Unit tests for first-import merge in `src/jetbrains-import/merge.test.ts` — writes a `JetBrains` group, preserves existing services and comments, creates the file when absent, suffixes a colliding `id`, aborts on malformed `services.json`
 
 ### Implementation for User Story 1
 
-- [ ] T010 [P] [US1] Implement the scanner in `src/jetbrains-import/scanner.ts` — locate `.idea/runConfigurations/*.xml` and `.idea/workspace.xml`, return raw XML with `shared`/`personal` provenance
-- [ ] T011 [P] [US1] Implement the parser in `src/jetbrains-import/parser.ts` — raw XML → `JetBrainsRunConfig` via `fast-xml-parser`, skip `default="true"` templates, return null on malformed input
-- [ ] T012 [P] [US1] Implement the mapper in `src/jetbrains-import/mapper.ts` — `JetBrainsRunConfig` → `MappedService` using the static mapping table and confidence levels
-- [ ] T013 [US1] Implement first-import merge in `src/jetbrains-import/merge.ts` — JSONC-safe write into the `JetBrains` group with `jsonc-parser`, preserve existing content, suffix colliding ids, abort on malformed `services.json` (depends on T003, T004)
-- [ ] T014 [US1] Implement the orchestrator in `src/jetbrains-import/importCommand.ts` — run scan → parse → map, show the multi-select QuickPick preview, call merge, build and present the `ImportReport` (notification + "Run Manager: JetBrains Import" Output channel) (depends on T010–T013)
-- [ ] T015 [US1] Register the `runManager.importFromJetBrains` command in `src/extension.ts` and contribute it under `contributes.commands` in `package.json` (depends on T014)
+- [X] T010 [P] [US1] Implement the scanner in `src/jetbrains-import/scanner.ts` — locate `.idea/runConfigurations/*.xml` and `.idea/workspace.xml`, return raw XML with `shared`/`personal` provenance
+- [X] T011 [P] [US1] Implement the parser in `src/jetbrains-import/parser.ts` — raw XML → `JetBrainsRunConfig` via `fast-xml-parser`, skip `default="true"` templates, return null on malformed input
+- [X] T012 [P] [US1] Implement the mapper in `src/jetbrains-import/mapper.ts` — `JetBrainsRunConfig` → `MappedService` using the static mapping table and confidence levels
+- [X] T013 [US1] Implement first-import merge in `src/jetbrains-import/merge.ts` — JSONC-safe write into the `JetBrains` group with `jsonc-parser`, preserve existing content, suffix colliding ids, abort on malformed `services.json` (depends on T003, T004)
+- [X] T014 [US1] Implement the orchestrator in `src/jetbrains-import/importCommand.ts` — run scan → parse → map, show the multi-select QuickPick preview, call merge, build and present the `ImportReport` (notification + "Run Manager: JetBrains Import" Output channel) (depends on T010–T013)
+- [X] T015 [US1] Register the `runManager.importFromJetBrains` command in `src/extension.ts` and contribute it under `contributes.commands` in `package.json` (depends on T014)
 
 **Checkpoint**: The manual import command works end-to-end — MVP is functional.
 

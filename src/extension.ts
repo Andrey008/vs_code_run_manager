@@ -5,6 +5,7 @@ import { LaunchRunner } from './runners/LaunchRunner';
 import { TaskRunner } from './runners/TaskRunner';
 import { DockerRunner } from './runners/DockerRunner';
 import { LogManager } from './managers/LogManager';
+import { importFromJetBrainsCommand } from './jetbrains-import/importCommand';
 
 export function activate(context: vscode.ExtensionContext): void {
   const shellRunner = new ShellRunner();
@@ -22,6 +23,9 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('runManager.openPanel', () => {
       vscode.commands.executeCommand('workbench.view.extension.run-manager');
     }),
+    vscode.commands.registerCommand('runManager.importFromJetBrains', () =>
+      importFromJetBrainsCommand(),
+    ),
     { dispose: () => logManager.dispose() },
     { dispose: () => launchRunner.dispose() },
     { dispose: () => taskRunner.dispose() },

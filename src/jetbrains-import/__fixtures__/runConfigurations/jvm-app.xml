@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Main" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.example.Main" />
+    <option name="VM_PARAMETERS" value="-Xmx512m" />
+    <option name="PROGRAM_PARAMETERS" value="--env dev" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <module name="my-app" />
+    <method v="2" />
+  </configuration>
+</component>

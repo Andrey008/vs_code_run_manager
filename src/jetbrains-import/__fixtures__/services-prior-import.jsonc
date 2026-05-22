@@ -1,0 +1,29 @@
+{
+  "groups": [
+    {
+      "name": "Application",
+      "services": [
+        {
+          "id": "api",
+          "name": "API Server",
+          "type": "shell",
+          "cmd": "node server.js"
+        }
+      ]
+    },
+    {
+      "name": "JetBrains",
+      "services": [
+        {
+          "id": "start-api",
+          "name": "Start API",
+          "type": "shell",
+          "cmd": "/bin/bash ${workspaceFolder}/scripts/start-api.sh --port 3000",
+          "cwd": "${workspaceFolder}",
+          "source": "jetbrains",
+          "originId": "start-api-shconfigurationtype"
+        }
+      ]
+    }
+  ]
+}

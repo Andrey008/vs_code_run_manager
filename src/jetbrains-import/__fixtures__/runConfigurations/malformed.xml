@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Broken" type="ShConfigurationType">
+    <option name="SCRIPT_PATH" value="$PROJECT_DIR$/x.sh"
+  </configuration>
+<!-- unclosed tags below -->

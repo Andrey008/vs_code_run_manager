@@ -1,0 +1,16 @@
+{
+  // Hand-written services — must survive an import untouched.
+  "groups": [
+    {
+      "name": "Application",
+      "services": [
+        {
+          "id": "api",
+          "name": "API Server",
+          "type": "shell",
+          "cmd": "node server.js" // the dev entrypoint
+        }
+      ]
+    }
+  ]
+}
