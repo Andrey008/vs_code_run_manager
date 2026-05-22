@@ -57,6 +57,10 @@
       {
         "command": "runManager.openPanel",
         "title": "Run Manager: Focus Panel"
+      },
+      {
+        "command": "runManager.importFromJetBrains",
+        "title": "Run Manager: Import from JetBrains"
       }
     ]
   },
@@ -89,5 +93,9 @@
     "react-dom": "^18.2.0",
     "ts-jest": "^29.1.2",
     "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.8.0",
+    "jsonc-parser": "^3.3.1"
   }
 }

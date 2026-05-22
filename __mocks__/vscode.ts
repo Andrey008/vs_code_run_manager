@@ -57,6 +57,7 @@ export const window = {
   showErrorMessage: jest.fn(),
   showWarningMessage: jest.fn(),
   showInformationMessage: jest.fn(),
+  showQuickPick: jest.fn(),
   createOutputChannel: jest.fn().mockReturnValue({
     appendLine: jest.fn(),
     append: jest.fn(),

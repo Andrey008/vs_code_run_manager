@@ -12,6 +12,7 @@ Run Manager gives you one side panel for every process your project needs — sh
 - **Health checks** — know when a service is actually *ready*, not just "process alive", via an HTTP ping or a log pattern.
 - **Embedded log terminal** — full ANSI colour, per service, powered by xterm.js.
 - **Run / Debug toggle** — launch configurations can start with the debugger attached, per service.
+- **Import from JetBrains** — migrate existing JetBrains run/debug configurations into Run Manager with one command, or accept the prompt shown when you open a JetBrains project.
 
 ## Getting started
 
@@ -20,6 +21,23 @@ Run Manager gives you one side panel for every process your project needs — sh
 3. The **All** tab lists every service it discovers. Tick the ones you use to add them to the **Active** tab.
 4. In **Active**, create groups and drag services to arrange your dashboard.
 5. Use the per-service controls to Start / Stop / Restart, or **Start All** on a group.
+
+## Importing from JetBrains
+
+Moving a project from a JetBrains IDE? Run Manager can migrate your existing
+run/debug configurations instead of making you recreate them.
+
+- When you open a workspace that contains a `.idea/` directory with run
+  configurations, Run Manager offers to import them. You can also run
+  **Run Manager: Import from JetBrains** from the Command Palette at any time.
+- A preview lists every discovered configuration; deselect anything you don't
+  want. Entries marked **needs review** were imported best-effort — verify them.
+- Imported configurations are written into `.vscode/services.json` under a
+  **JetBrains** group. `launch.json` is never modified, and existing
+  `services.json` content and comments are preserved.
+- Re-running the import is safe: matched services are updated in place, new ones
+  are added, and a configuration removed in JetBrains is flagged stale rather
+  than deleted.
 
 ## Configuration
 

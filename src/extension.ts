@@ -5,6 +5,8 @@ import { LaunchRunner } from './runners/LaunchRunner';
 import { TaskRunner } from './runners/TaskRunner';
 import { DockerRunner } from './runners/DockerRunner';
 import { LogManager } from './managers/LogManager';
+import { importFromJetBrainsCommand, disposeImportResources } from './jetbrains-import/importCommand';
+import { maybeOfferImport } from './jetbrains-import/activation';
 
 export function activate(context: vscode.ExtensionContext): void {
   const shellRunner = new ShellRunner();
@@ -22,11 +24,20 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('runManager.openPanel', () => {
       vscode.commands.executeCommand('workbench.view.extension.run-manager');
     }),
+    vscode.commands.registerCommand('runManager.importFromJetBrains', () =>
+      importFromJetBrainsCommand(),
+    ),
+    { dispose: disposeImportResources },
     { dispose: () => logManager.dispose() },
     { dispose: () => launchRunner.dispose() },
     { dispose: () => taskRunner.dispose() },
     { dispose: () => dockerRunner.dispose() },
   );
+
+  const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+  if (workspaceFolder) {
+    void maybeOfferImport(context, workspaceFolder.uri.fsPath);
+  }
 }
 
 export function deactivate(): void {}

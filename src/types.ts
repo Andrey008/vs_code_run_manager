@@ -29,6 +29,12 @@ interface ServiceConfigBase {
   envFile?: string;
   dependsOn?: string[];
   healthCheck?: HealthCheck;
+  /** Set to "jetbrains" when this service was created by the JetBrains importer. */
+  source?: 'jetbrains';
+  /** Stable key of the JetBrains run configuration this service was imported from. */
+  originId?: string;
+  /** Set to true when a re-import finds the source JetBrains configuration gone. */
+  stale?: boolean;
 }
 
 export interface ShellServiceConfig extends ServiceConfigBase {

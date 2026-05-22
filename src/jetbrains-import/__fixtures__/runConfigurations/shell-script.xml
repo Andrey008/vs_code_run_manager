@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Start API" type="ShConfigurationType">
+    <option name="INTERPRETER_PATH" value="/bin/bash" />
+    <option name="SCRIPT_PATH" value="$PROJECT_DIR$/scripts/start-api.sh" />
+    <option name="SCRIPT_OPTIONS" value="--port 3000" />
+    <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <option name="EXECUTE_IN_TERMINAL" value="true" />
+    <envs>
+      <env name="NODE_ENV" value="development" />
+    </envs>
+    <method v="2" />
+  </configuration>
+</component>

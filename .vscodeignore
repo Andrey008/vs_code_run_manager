@@ -9,6 +9,12 @@ node_modules/**
 test-workspace/**
 coverage/**
 
+# Specs & local AI-development scaffolding — never shipped in the .vsix
+specs/**
+.specify/**
+docs/**
+CLAUDE.md
+
 # Build & tooling config
 esbuild.*.js
 jest.config.js
