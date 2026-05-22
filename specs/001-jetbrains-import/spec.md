@@ -8,6 +8,13 @@
 
 **Input**: User description: "Import JetBrains run configurations into Run Manager. On first activation (and via a manual command), detect JetBrains run/debug configurations in the workspace and migrate them into .vscode/services.json, without touching launch.json."
 
+## Clarifications
+
+### Session 2026-05-22
+
+- Q: On re-import, what happens to a previously imported service whose source JetBrains configuration no longer exists? → A: Mark it as stale and keep it — never auto-delete — and surface it in the import report.
+- Q: When an imported service's identifier collides with an existing service's identifier, how is it resolved? → A: Auto-suffix the imported service's identifier to make it unique; the existing service is left untouched.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Migrate JetBrains run configs through a preview (Priority: P1)
@@ -124,6 +131,12 @@ added, and no duplicates appear.
 - **Inline environment variables**: when a JetBrains configuration carries environment
   variables that cannot be represented directly, they are surfaced in the report as a
   manual follow-up rather than being lost silently.
+- **Orphaned imported service**: when a re-import finds that a previously imported
+  service's source JetBrains configuration no longer exists, the service is marked stale
+  and kept — never auto-deleted — and is listed in the import report.
+- **Identifier collision**: when an imported service's identifier matches that of an
+  existing service, the imported identifier is automatically made unique; the existing
+  service is not modified.
 
 ## Requirements *(mandatory)*
 
@@ -167,6 +180,12 @@ added, and no duplicates appear.
   suppressing only future automatic prompts, never the manual command.
 - **FR-017**: System MUST account for every discovered configuration in the report —
   imported, needs-review, or skipped — so that none is silently dropped.
+- **FR-018**: System MUST, on re-import, mark a previously imported service whose source
+  JetBrains configuration no longer exists as stale and retain it; such a service MUST
+  NOT be deleted automatically and MUST be reported to the developer.
+- **FR-019**: System MUST, when an imported service's identifier would collide with an
+  existing service's identifier, automatically adjust the imported identifier to a unique
+  value; the existing service MUST be left untouched.
 
 ### Key Entities *(include if feature involves data)*
 
