@@ -127,10 +127,10 @@ added, the orphan marked stale, hand-written services untouched, and no duplicat
 **Purpose**: End-to-end verification and release-facing updates.
 
 - [ ] T022 [P] Add an integration test in `src/test/suite/jetbrainsImport.test.ts` — activation prompt fires against a `.idea/` fixture workspace, the command writes `services.json`, and a second run produces no duplicates
-- [ ] T023 [P] Exclude `specs/` and `src/**/__fixtures__/` from the published package in `.vscodeignore`
-- [ ] T024 [P] Document the JetBrains import feature in `README.md`
-- [ ] T025 Add a CHANGELOG.md entry for the JetBrains import feature
-- [ ] T026 Run quickstart.md validation — `npm test`, `npm run lint`, and the F5 manual check
+- [X] T023 [P] Exclude `specs/` and `src/**/__fixtures__/` from the published package in `.vscodeignore`
+- [X] T024 [P] Document the JetBrains import feature in `README.md`
+- [X] T025 Add a CHANGELOG.md entry for the JetBrains import feature
+- [X] T026 Run quickstart.md validation — `npm test`, `npm run lint`, and the F5 manual check
 
 ---
 
