@@ -367,7 +367,7 @@ export class RunManagerPanel implements vscode.WebviewViewProvider {
 <body>
   <div id="root"></div>
   <script nonce="${nonce}">
-    window.initialData = ${JSON.stringify({ groups: [] })};
+    window.initialData = ${JSON.stringify({ groups: [], nonce })};
   </script>
   <script nonce="${nonce}" src="${scriptUri}"></script>
 </body>

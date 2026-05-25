@@ -158,6 +158,21 @@ describe('RunManagerPanel', () => {
       expect((webview.options as { enableScripts: boolean }).enableScripts).toBe(true);
     });
 
+    it('passes the script nonce through window.initialData (so App can mount nonce-scoped <style>)', () => {
+      // Regression: ActionButton spinner/ring keyframes live in actionButtonStyles.ts
+      // and are injected by App.tsx as <style nonce={nonce}>. Without nonce in
+      // initialData the <style> never renders, so the .rm-action-ring-spinning
+      // class has no rules → the orange "starting" ring is invisible in prod.
+      resolveView();
+      const webview = (provider as unknown as { _view: vscode.WebviewView })._view!.webview;
+      const cspNonce = webview.html.match(/nonce-([a-f0-9]{32})/)?.[1];
+      expect(cspNonce).toBeDefined();
+      const initialDataMatch = webview.html.match(/window\.initialData\s*=\s*(\{[^;]+\});/);
+      expect(initialDataMatch).not.toBeNull();
+      const initialData = JSON.parse(initialDataMatch![1]);
+      expect(initialData.nonce).toBe(cspNonce);
+    });
+
     it('registers the panel as a context subscription (file watcher)', () => {
       expect(context.subscriptions.length).toBeGreaterThan(0);
       expect(vscode.workspace.createFileSystemWatcher).toHaveBeenCalled();
