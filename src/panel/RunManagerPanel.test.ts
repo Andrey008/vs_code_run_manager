@@ -287,6 +287,23 @@ describe('RunManagerPanel', () => {
       await flush();
       expect(runners.launchRunner.start).toHaveBeenCalledWith(expect.objectContaining({ id: 'web', mode: 'debug' }));
     });
+
+    it('startGroup launches launch services in run mode even after a prior debug click (FR-14)', async () => {
+      resolveView();
+      await ready();
+      // Prior per-service debug click sets _modes['web'] = 'debug'.
+      msgHandler({ type: 'start', id: 'web', mode: 'debug' });
+      await flush();
+      (runners.launchRunner.start as jest.Mock).mockClear();
+
+      // Start All on the group containing 'web' — FR-14: must NOT use the
+      // previously toggled debug; falls back to services.json mode (else 'run').
+      msgHandler({ type: 'startGroup', groupName: 'App' });
+      for (let i = 0; i < 3; i++) await flush();
+
+      expect(runners.launchRunner.start).not.toHaveBeenCalledWith(expect.objectContaining({ id: 'web', mode: 'debug' }));
+      expect(runners.launchRunner.start).toHaveBeenCalledWith(expect.objectContaining({ id: 'web', mode: 'run' }));
+    });
   });
 
   describe('messages', () => {

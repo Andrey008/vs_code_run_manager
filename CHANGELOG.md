@@ -5,6 +5,23 @@ All notable changes to the Run Manager extension are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **Consolidated service controls** — every service row now has a single
+  **morphing action button** whose shape and ring convey the status: green Play ▶
+  when stopped, red square with a spinning orange ring while starting, plain red
+  square when running, red square with a steady green ring when ready
+  (health-check passed), amber ⚠ when crashed. The standalone status badge is
+  gone. **Restart** stays separate and always visible.
+- **`launch` services**: at rest you see two buttons — Run and a custom Debug
+  bug icon. Clicking either launches the service in that mode; while the service
+  runs, only the active button is shown, and both reappear when it returns to
+  stopped. The previous run/debug mode toggle is removed. **Start All** for a
+  group launches every `launch` service in run mode; the per-service `mode`
+  field in `services.json` (if set) remains as the implicit default.
+
 ## [1.1.0] - 2026-05-22
 
 ### Added

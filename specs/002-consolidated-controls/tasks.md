@@ -106,10 +106,10 @@ button shows while running; stop, verify both reappear.
 
 **Purpose**: Release-facing updates and end-to-end verification.
 
-- [ ] T016 [P] Add an `## [Unreleased]` entry in `CHANGELOG.md` for the Consolidated controls feature (Keep a Changelog format)
-- [ ] T017 [P] Update `README.md` — mention the morphing action button and the run/debug two-button layout for `launch` services
-- [ ] T018 [P] Add a unit test in `src/panel/RunManagerPanel.test.ts` asserting `startGroup` launches `launch` services with `mode: 'run'` (or the `services.json` `mode` default), per FR-014
-- [ ] T019 Run quickstart validation per `quickstart.md` — `npm test` (both Jest projects green), `npm run lint`, `npm run build`, and the F5 Extension Development Host manual check
+- [X] T016 [P] Add an `## [Unreleased]` entry in `CHANGELOG.md` for the Consolidated controls feature (Keep a Changelog format)
+- [X] T017 [P] Update `README.md` — mention the morphing action button and the run/debug two-button layout for `launch` services
+- [X] T018 [P] Add a unit test in `src/panel/RunManagerPanel.test.ts` asserting `startGroup` launches `launch` services with `mode: 'run'` (or the `services.json` `mode` default), per FR-014
+- [X] T019 Run quickstart validation per `quickstart.md` — `npm test` (both Jest projects green), `npm run lint`, `npm run build`, and the F5 Extension Development Host manual check
 
 ---
 
