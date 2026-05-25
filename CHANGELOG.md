@@ -7,12 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-05-25
+
 ### Changed
 
 - **Consolidated service controls** — every service row now has a single
   **morphing action button** whose shape and ring convey the status: green Play ▶
-  when stopped, red square with a spinning orange ring while starting, plain red
-  square when running, red square with a steady green ring when ready
+  when stopped, red square with a clock-face orange spinner while starting,
+  plain red square when running, red square with a thin green ring when ready
   (health-check passed), amber ⚠ when crashed. The standalone status badge is
   gone. **Restart** stays separate and always visible.
 - **`launch` services**: at rest you see two buttons — Run and a custom Debug
@@ -21,6 +23,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   stopped. The previous run/debug mode toggle is removed. **Start All** for a
   group launches every `launch` service in run mode; the per-service `mode`
   field in `services.json` (if set) remains as the implicit default.
+
+### Fixed
+
+- **Stop now reliably kills shell-wrapped processes.** The `sh -c "…"` wrapper
+  used by `shell` services is spawned `detached: true`, and Stop / Restart now
+  signal the whole process group (`process.kill(-pid, sig)`), so long-running
+  children — e.g. a JVM with retry-loop signal handlers — actually receive
+  SIGTERM/SIGKILL instead of being orphaned.
 
 ## [1.1.0] - 2026-05-22
 

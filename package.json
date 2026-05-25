@@ -2,7 +2,7 @@
   "name": "run-manager",
   "displayName": "Run Manager",
   "description": "Unified panel for launching, monitoring, and stopping local services — better than IntelliJ Services panel",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "publisher": "andrey008",
   "license": "Apache-2.0",
   "icon": "icons/icon.png",
