@@ -31,10 +31,10 @@ unit tests co-located as `*.test.tsx`. Extension code in `src/`.
 **Purpose**: Stand up a webview Jest project so React components can be unit-tested,
 and install supporting libraries.
 
-- [ ] T001 Add `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event` to `devDependencies` in `package.json` and run `npm install`
-- [ ] T002 [P] Create `jest.webview.config.js` — separate Jest project: `roots: ['<rootDir>/webview/src']`, `testEnvironment: 'jsdom'`, `preset: 'ts-jest'`, `moduleNameMapper` for the `../vscodeApi` import
-- [ ] T003 Update `package.json` `scripts.test` to run both projects: `jest --projects jest.config.js jest.webview.config.js`
-- [ ] T004 [P] Create `webview/src/__mocks__/vscodeApi.ts` — mock `postMessage` capturing dispatched messages for test assertions
+- [X] T001 Add `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event` to `devDependencies` in `package.json` and run `npm install`
+- [X] T002 [P] Create `jest.webview.config.js` — separate Jest project: `roots: ['<rootDir>/webview/src']`, `testEnvironment: 'jsdom'`, `preset: 'ts-jest'`, `moduleNameMapper` for the `../vscodeApi` import
+- [X] T003 Update `package.json` `scripts.test` to run both projects: `jest --projects jest.config.js jest.webview.config.js`
+- [X] T004 [P] Create `webview/src/__mocks__/vscodeApi.ts` — mock `postMessage` capturing dispatched messages for test assertions
 
 ---
 
@@ -44,8 +44,8 @@ and install supporting libraries.
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T005 Update `WebviewMessage` in `src/types.ts` — add `mode?: ServiceMode` to the `start` variant; remove the `toggleMode` variant entirely
-- [ ] T006 Update `src/panel/RunManagerPanel.ts` — `case 'start'` reads `message.mode` (default `'run'` for `launch` services); delete `case 'toggleMode'` (currently line 133); ensure `case 'startGroup'` launches `launch` services in their `services.json` `mode` default (else `'run'`, per FR-014) (depends on T005)
+- [X] T005 Update `WebviewMessage` in `src/types.ts` — add `mode?: ServiceMode` to the `start` variant; remove the `toggleMode` variant entirely
+- [X] T006 Update `src/panel/RunManagerPanel.ts` — `case 'start'` reads `message.mode` (default `'run'` for `launch` services); delete `case 'toggleMode'` (currently line 133); ensure `case 'startGroup'` launches `launch` services in their `services.json` `mode` default (else `'run'`, per FR-014) (depends on T005)
 
 **Checkpoint**: Protocol & wiring ready — user story implementation can begin.
 
@@ -64,15 +64,15 @@ and confirm every service's state is identifiable from its action button alone
 
 ### Tests for User Story 1 ⚠️ (write first, confirm they FAIL)
 
-- [ ] T007 [P] [US1] `ActionButton` unit tests in `webview/src/components/ActionButton.test.tsx` — for each `status × kind` cell (5 × 2 = 10) assert the rendered shape/ring/glyph per `contracts/visual-states.md`; assert the `title` tooltip names the state and action; assert click sends the correct `start` (with `mode`) or `stop` message via the `vscodeApi` mock
-- [ ] T008 [P] [US1] `ServiceItem` unit tests in `webview/src/components/ServiceItem.test.tsx` — a non-`launch` row renders one `ActionButton` (`kind='run'`) + `Restart` + no `StatusBadge`; `Restart` is visible in every status (`stopped`, `starting`, `running`, `ready`, `crashed`) per FR-007
+- [X] T007 [P] [US1] `ActionButton` unit tests in `webview/src/components/ActionButton.test.tsx` — for each `status × kind` cell (5 × 2 = 10) assert the rendered shape/ring/glyph per `contracts/visual-states.md`; assert the `title` tooltip names the state and action; assert click sends the correct `start` (with `mode`) or `stop` message via the `vscodeApi` mock
+- [X] T008 [P] [US1] `ServiceItem` unit tests in `webview/src/components/ServiceItem.test.tsx` — a non-`launch` row renders one `ActionButton` (`kind='run'`) + `Restart` + no `StatusBadge`; `Restart` is visible in every status (`stopped`, `starting`, `running`, `ready`, `crashed`) per FR-007
 
 ### Implementation for User Story 1
 
-- [ ] T009 [P] [US1] Implement `webview/src/components/DebugIcon.tsx` — minimal-bug SVG, `currentColor`, the markup from `docs/superpowers/specs/2026-05-22-consolidated-controls-design.md`
-- [ ] T010 [US1] Implement `webview/src/components/ActionButton.tsx` — props `{ status, kind, onAction }`; renders Play / Stop-square / spinning-orange-ring / steady-green-ring / amber-⚠ per the visual-states contract; uses `<DebugIcon>` for `kind='debug'` glyphs; CSS `@keyframes` for the starting ring; `title` tooltip per `contracts/visual-states.md`; click handler invokes `onAction(intent, mode)` (depends on T009)
-- [ ] T011 [US1] Rewrite `webview/src/components/ServiceItem.tsx` — drop the `StatusBadge` import and the legacy Start/Stop/mode-toggle buttons; render one `ActionButton` (`kind='run'`) for every service (launch debug arrives in US2); always render `Restart` (FR-007); keep the existing `Remove` button for the Active tab; wire `onAction` to post `start` / `stop` via `postMessage` (depends on T010)
-- [ ] T012 [US1] Delete `webview/src/components/StatusBadge.tsx` (only consumer was `ServiceItem`, verified in research R2) (depends on T011)
+- [X] T009 [P] [US1] Implement `webview/src/components/DebugIcon.tsx` — minimal-bug SVG, `currentColor`, the markup from `docs/superpowers/specs/2026-05-22-consolidated-controls-design.md`
+- [X] T010 [US1] Implement `webview/src/components/ActionButton.tsx` — props `{ status, kind, onAction }`; renders Play / Stop-square / spinning-orange-ring / steady-green-ring / amber-⚠ per the visual-states contract; uses `<DebugIcon>` for `kind='debug'` glyphs; CSS `@keyframes` for the starting ring; `title` tooltip per `contracts/visual-states.md`; click handler invokes `onAction(intent, mode)` (depends on T009)
+- [X] T011 [US1] Rewrite `webview/src/components/ServiceItem.tsx` — drop the `StatusBadge` import and the legacy Start/Stop/mode-toggle buttons; render one `ActionButton` (`kind='run'`) for every service (launch debug arrives in US2); always render `Restart` (FR-007); keep the existing `Remove` button for the Active tab; wire `onAction` to post `start` / `stop` via `postMessage` (depends on T010)
+- [X] T012 [US1] Delete `webview/src/components/StatusBadge.tsx` (only consumer was `ServiceItem`, verified in research R2) (depends on T011)
 
 **Checkpoint**: The morphing button works end-to-end for all services in run mode — MVP functional.
 

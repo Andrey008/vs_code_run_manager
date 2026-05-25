@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StatusBadge } from './StatusBadge';
+import type { CSSProperties } from 'react';
+import { ActionButton } from './ActionButton';
 import { postMessage } from '../vscodeApi';
 import type { ServiceConfig, ServiceMode, ServiceStatus } from '../types';
 
@@ -15,18 +15,29 @@ interface Props {
   onRemove?: () => void;
 }
 
-export function ServiceItem({ service, status, isSelected, onSelect, showCheckbox, isChecked, onToggle, onRemove }: Props) {
-  const [mode, setMode] = useState<ServiceMode>(service.mode ?? 'run');
-
-  const canStart = status === 'stopped' || status === 'crashed';
-  const canStop = status === 'starting' || status === 'running' || status === 'ready';
+export function ServiceItem({
+  service,
+  status,
+  isSelected,
+  onSelect,
+  showCheckbox,
+  isChecked,
+  onToggle,
+  onRemove,
+}: Props) {
   const isLaunch = service.type === 'launch';
 
-  function toggleMode() {
-    const next: ServiceMode = mode === 'run' ? 'debug' : 'run';
-    setMode(next);
-    postMessage({ type: 'toggleMode', id: service.id, mode: next });
-  }
+  const handleAction = (intent: 'start' | 'stop', mode: ServiceMode) => {
+    if (intent === 'start') {
+      postMessage(
+        isLaunch
+          ? { type: 'start', id: service.id, mode }
+          : { type: 'start', id: service.id },
+      );
+    } else {
+      postMessage({ type: 'stop', id: service.id });
+    }
+  };
 
   return (
     <div
@@ -45,69 +56,56 @@ export function ServiceItem({ service, status, isSelected, onSelect, showCheckbo
         <input
           type="checkbox"
           checked={isChecked}
-          onChange={e => { e.stopPropagation(); onToggle(); }}
+          onChange={e => {
+            e.stopPropagation();
+            onToggle();
+          }}
           onClick={e => e.stopPropagation()}
           style={{ cursor: 'pointer', flexShrink: 0, margin: 0 }}
         />
       )}
 
-      <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '13px' }}>
+      <span
+        style={{
+          flex: 1,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          fontSize: '13px',
+        }}
+      >
         {service.name}
       </span>
 
       {service.type === 'docker-compose' && (
-        <span title="Docker Compose" style={{ fontSize: '13px', opacity: 0.6 }}>🐳</span>
+        <span title="Docker Compose" style={{ fontSize: '13px', opacity: 0.6 }}>
+          🐳
+        </span>
       )}
-
-      <StatusBadge status={status} />
 
       {!showCheckbox && (
         <>
-          {isLaunch && (
-            <button
-              title={mode === 'run' ? 'Run mode (click to switch to Debug)' : 'Debug mode (click to switch to Run)'}
-              style={modeStyle(mode)}
-              onClick={e => { e.stopPropagation(); toggleMode(); }}
-            >
-              {mode === 'run' ? '▶' : '🐛'}
-            </button>
-          )}
+          <ActionButton status={status} kind="run" onAction={handleAction} />
 
-          <span style={{ display: 'flex', gap: '2px' }}>
-            {canStart && (
-              <button
-                title="Start"
-                style={btnStyle('#22c55e')}
-                onClick={e => { e.stopPropagation(); postMessage({ type: 'start', id: service.id }); }}
-              >
-                ▶
-              </button>
-            )}
-            {canStop && (
-              <button
-                title="Stop"
-                style={btnStyle('#ef4444')}
-                onClick={e => { e.stopPropagation(); postMessage({ type: 'stop', id: service.id }); }}
-              >
-                ■
-              </button>
-            )}
-            {canStop && (
-              <button
-                title="Restart"
-                style={btnStyle('#f59e0b')}
-                onClick={e => { e.stopPropagation(); postMessage({ type: 'restart', id: service.id }); }}
-              >
-                ↺
-              </button>
-            )}
-          </span>
+          <button
+            title="Restart"
+            style={iconBtnStyle('#f59e0b')}
+            onClick={e => {
+              e.stopPropagation();
+              postMessage({ type: 'restart', id: service.id });
+            }}
+          >
+            ↺
+          </button>
 
           {onRemove && (
             <button
               title="Remove from Active"
-              style={btnStyle('var(--vscode-descriptionForeground)')}
-              onClick={e => { e.stopPropagation(); onRemove(); }}
+              style={iconBtnStyle('var(--vscode-descriptionForeground)')}
+              onClick={e => {
+                e.stopPropagation();
+                onRemove();
+              }}
             >
               ✕
             </button>
@@ -118,7 +116,7 @@ export function ServiceItem({ service, status, isSelected, onSelect, showCheckbo
   );
 }
 
-function btnStyle(color: string): React.CSSProperties {
+function iconBtnStyle(color: string): CSSProperties {
   return {
     background: 'none',
     border: 'none',
@@ -133,18 +131,5 @@ function btnStyle(color: string): React.CSSProperties {
     borderRadius: '3px',
     minWidth: '22px',
     minHeight: '22px',
-  };
-}
-
-function modeStyle(mode: ServiceMode): React.CSSProperties {
-  return {
-    background: mode === 'debug' ? 'var(--vscode-debugIcon-startForeground, #89d185)' : 'none',
-    border: '1px solid currentColor',
-    borderRadius: '3px',
-    color: mode === 'debug' ? 'inherit' : 'var(--vscode-descriptionForeground)',
-    cursor: 'pointer',
-    fontSize: '16px',
-    padding: '2px 6px',
-    lineHeight: 1,
   };
 }

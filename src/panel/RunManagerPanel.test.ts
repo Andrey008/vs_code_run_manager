@@ -280,11 +280,10 @@ describe('RunManagerPanel', () => {
       expect(runners.dockerRunner.start).toHaveBeenCalledWith(expect.objectContaining({ id: 'cache' }));
     });
 
-    it('applies a toggled debug mode on the next start', async () => {
+    it('carries the mode from the start message', async () => {
       resolveView();
       await ready();
-      msgHandler({ type: 'toggleMode', id: 'web', mode: 'debug' });
-      msgHandler({ type: 'start', id: 'web' });
+      msgHandler({ type: 'start', id: 'web', mode: 'debug' });
       await flush();
       expect(runners.launchRunner.start).toHaveBeenCalledWith(expect.objectContaining({ id: 'web', mode: 'debug' }));
     });

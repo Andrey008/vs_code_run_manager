@@ -112,6 +112,8 @@ export class RunManagerPanel implements vscode.WebviewViewProvider {
         this._loadConfigAndSendInit();
         break;
       case 'start':
+        // mode carried by the message wins over any previously toggled mode.
+        if (msg.mode) this._modes.set(msg.id, msg.mode);
         this._startWithDeps(msg.id).catch(err =>
           vscode.window.showErrorMessage(`Run Manager: ${(err as Error).message}`)
         );
@@ -128,10 +130,9 @@ export class RunManagerPanel implements vscode.WebviewViewProvider {
         );
         break;
       case 'startServices':
+        // FR-14: group / multi-service launches always use the services.json mode default.
+        for (const id of msg.ids) this._modes.delete(id);
         Promise.allSettled(msg.ids.map(id => this._startWithDeps(id))).catch(() => { /* per-service errors surface individually */ });
-        break;
-      case 'toggleMode':
-        this._modes.set(msg.id, msg.mode);
         break;
       case 'saveLayout':
         this._context.workspaceState.update(LAYOUT_KEY, normalizeLayout(msg.layout));
@@ -188,6 +189,10 @@ export class RunManagerPanel implements vscode.WebviewViewProvider {
   private async _startGroup(groupName: string): Promise<void> {
     const group = this._config?.groups.find(g => g.name === groupName);
     if (!group) return;
+
+    // FR-14: group launches always use the services.json mode default — clear any
+    // previously toggled per-service mode before dispatch.
+    for (const svc of group.services) this._modes.delete(svc.id);
 
     await Promise.allSettled(
       group.services.map(svc => this._startWithDeps(svc.id))
