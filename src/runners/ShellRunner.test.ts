@@ -46,7 +46,13 @@ function makeProc(): MockProcess {
   return proc;
 }
 
-beforeEach(() => jest.clearAllMocks());
+beforeEach(() => {
+  jest.clearAllMocks();
+  // Stub process.kill so the group-kill (`process.kill(-pid, sig)`) added in
+  // ShellRunner doesn't actually signal a real PGID matching MockProcess.pid.
+  jest.spyOn(process, 'kill').mockImplementation(() => true);
+});
+afterEach(() => jest.restoreAllMocks());
 
 describe('ShellRunner', () => {
   it('spawns process with correct cmd and cwd', async () => {
@@ -108,6 +114,18 @@ describe('ShellRunner', () => {
     await runner.stop(shellSvc);
     expect(proc.kill).toHaveBeenCalledWith('SIGTERM');
     expect(statuses.at(-1)).toEqual({ id: 'api', status: 'stopped' });
+  });
+
+  it('signals the whole process group on stop (orphan-child fix)', async () => {
+    // Regression guard: the `sh -c "java ..."` wrapper can leave child
+    // processes alive after `proc.kill('SIGTERM')`. ShellRunner spawns with
+    // `detached: true` and signals -pid so the whole group dies.
+    const proc = makeProc();
+    const { runner } = makeRunner();
+    await runner.start(shellSvc);
+    proc.stdout.emit('data', Buffer.from('running\n'));
+    await runner.stop(shellSvc);
+    expect(process.kill).toHaveBeenCalledWith(-1234, 'SIGTERM');
   });
 
   it('sends SIGKILL after 5s if process does not exit on SIGTERM', async () => {

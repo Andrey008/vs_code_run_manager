@@ -49,9 +49,9 @@ export class ShellRunner implements IRunner {
     const proc = this._processes.get(service.id);
     if (!proc) return;
 
-    proc.kill('SIGTERM');
+    killGroup(proc, 'SIGTERM');
     const timer = setTimeout(() => {
-      if (this._processes.has(service.id)) proc.kill('SIGKILL');
+      if (this._processes.has(service.id)) killGroup(proc, 'SIGKILL');
     }, 5000);
 
     proc.once('exit', () => clearTimeout(timer));
@@ -76,14 +76,14 @@ export class ShellRunner implements IRunner {
 
       await new Promise<void>(resolve => {
         const timer = setTimeout(() => {
-          if (this._processes.has(svc.id)) proc.kill('SIGKILL');
+          if (this._processes.has(svc.id)) killGroup(proc, 'SIGKILL');
         }, 5000);
         proc.once('exit', () => {
           clearTimeout(timer);
           this._processes.delete(svc.id);
           resolve();
         });
-        proc.kill('SIGTERM');
+        killGroup(proc, 'SIGTERM');
       });
     }
 
@@ -96,6 +96,12 @@ export class ShellRunner implements IRunner {
       cwd: svc.cwd ?? process.cwd(),
       env: { ...process.env },
       stdio: ['ignore', 'pipe', 'pipe'],
+      // `detached: true` makes the child its own process-group leader. We then
+      // signal the whole group on stop/restart (`killGroup` below) so children
+      // forked by the `sh -c` wrapper (e.g. a JVM with retry-loop signal
+      // handlers) actually receive SIGTERM/SIGKILL — fixes "Stop didn't kill
+      // the process" for shell-wrapped commands.
+      detached: true,
     });
 
     this._processes.set(svc.id, proc);
@@ -138,3 +144,21 @@ export class ShellRunner implements IRunner {
     return this._machines.get(id)!;
   }
 }
+
+/**
+ * Send a signal to the process AND to its process group, so children forked by
+ * the `sh -c` wrapper get the signal too. The direct `proc.kill` is kept
+ * because the unit tests mock `proc.kill`; the `process.kill(-pid, ...)` call
+ * is what actually solves the orphan-child problem in production.
+ */
+function killGroup(proc: import('child_process').ChildProcess, signal: NodeJS.Signals): void {
+  proc.kill(signal);
+  if (proc.pid && process.platform !== 'win32') {
+    try {
+      process.kill(-proc.pid, signal);
+    } catch {
+      // ESRCH: group already gone (process exited between the two kills).
+    }
+  }
+}
+
