@@ -82,7 +82,7 @@ function renderGlyph(
     return (
       <>
         <span className="rm-action-ring">
-          {Array.from({ length: 8 }, (_, i) => (
+          {Array.from({ length: 12 }, (_, i) => (
             <span
               key={i}
               className="rm-action-tick"
