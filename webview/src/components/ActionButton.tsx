@@ -8,33 +8,8 @@ const ACTION_GREEN = 'var(--vscode-debugIcon-startForeground, #22c55e)';
 const ACTION_RED = 'var(--vscode-errorForeground, #ef4444)';
 const ACTION_AMBER = 'var(--vscode-problemsWarningIcon-foreground, #f59e0b)';
 
-// Inject the ring styles once at module load (also runs cleanly under jsdom).
-if (typeof document !== 'undefined') {
-  const ID = 'rm-action-button-styles';
-  if (!document.getElementById(ID)) {
-    const style = document.createElement('style');
-    style.id = ID;
-    style.textContent = `
-      @keyframes rm-action-spin { to { transform: rotate(360deg); } }
-      .rm-action-ring {
-        position: absolute;
-        inset: -3px;
-        border-radius: 50%;
-        pointer-events: none;
-      }
-      .rm-action-ring-spinning {
-        border: 2.5px solid transparent;
-        border-top-color: var(--vscode-progressBar-background, #f59e0b);
-        border-right-color: var(--vscode-progressBar-background, #f59e0b);
-        animation: rm-action-spin 0.7s linear infinite;
-      }
-      .rm-action-ring-ready {
-        border: 2.5px solid var(--vscode-debugIcon-startForeground, #22c55e);
-      }
-    `;
-    document.head.appendChild(style);
-  }
-}
+// The ring CSS lives in `actionButtonStyles.ts` and is rendered once by `App`
+// with the webview's CSP nonce — see ./actionButtonStyles.ts for the why.
 
 interface Props {
   status: ServiceStatus;

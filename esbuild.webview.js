@@ -10,6 +10,9 @@ const options = {
   format: 'iife',
   platform: 'browser',
   target: ['chrome120'],
+  // Use the modern JSX runtime so components don't need `import React` in scope —
+  // matches tsconfig.webview.json's `"jsx": "react-jsx"`.
+  jsx: 'automatic',
   sourcemap: true,
   minify: false,
   define: {
