@@ -36,7 +36,9 @@ export const ACTION_BUTTON_CSS = `
   margin: -1.5px 0 0 -1px;
   background: #f59e0b;
   border-radius: 1px;
-  transform: rotate(calc(var(--i) * 30deg)) translateY(-9px);
+  /* Negative angle flips the index→position mapping so the bright-tick
+     chase (which steps through indices in time order) reads as clockwise. */
+  transform: rotate(calc(var(--i) * -30deg)) translateY(-9px);
   animation: rm-tick-fade 0.9s linear infinite;
   animation-delay: calc(var(--i) * -0.075s);
 }
