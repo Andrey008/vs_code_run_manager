@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { ActionButton } from './ActionButton';
 import { postMessage } from '../vscodeApi';
@@ -28,6 +28,14 @@ export function ServiceItem({
 }: Props) {
   const isLaunch = service.type === 'launch';
   const [activeKind, setActiveKind] = useState<'run' | 'debug' | null>(null);
+
+  // Reset activeKind when the service returns to a non-running state so the
+  // run + debug pair reappears (FR-009) and no stale kind lingers.
+  useEffect(() => {
+    if (status === 'stopped' || status === 'crashed') {
+      setActiveKind(null);
+    }
+  }, [status]);
 
   const handleAction = (intent: 'start' | 'stop', mode: ServiceMode) => {
     if (intent === 'start') {

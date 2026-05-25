@@ -113,6 +113,9 @@ export class RunManagerPanel implements vscode.WebviewViewProvider {
         break;
       case 'start':
         // mode carried by the message wins over any previously toggled mode.
+        // _modes persists until overwritten by another `start`, or cleared by
+        // `startGroup` / `startServices` (FR-14). `restart` intentionally
+        // inherits the last-started mode (see line 240).
         if (msg.mode) this._modes.set(msg.id, msg.mode);
         this._startWithDeps(msg.id).catch(err =>
           vscode.window.showErrorMessage(`Run Manager: ${(err as Error).message}`)

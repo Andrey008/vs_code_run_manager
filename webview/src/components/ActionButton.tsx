@@ -2,6 +2,12 @@ import type { CSSProperties, MouseEvent, ReactNode } from 'react';
 import { DebugIcon } from './DebugIcon';
 import type { ServiceMode, ServiceStatus } from '../types';
 
+// Theme-aware colour roles. Resolve to VS Code theme variables at runtime; the
+// hex fallbacks only apply if the variable is absent (e.g. in jsdom tests).
+const ACTION_GREEN = 'var(--vscode-debugIcon-startForeground, #22c55e)';
+const ACTION_RED = 'var(--vscode-errorForeground, #ef4444)';
+const ACTION_AMBER = 'var(--vscode-problemsWarningIcon-foreground, #f59e0b)';
+
 // Inject the ring styles once at module load (also runs cleanly under jsdom).
 if (typeof document !== 'undefined') {
   const ID = 'rm-action-button-styles';
@@ -18,11 +24,13 @@ if (typeof document !== 'undefined') {
       }
       .rm-action-ring-spinning {
         border: 2.5px solid transparent;
-        border-top-color: #f59e0b;
-        border-right-color: #f59e0b;
+        border-top-color: var(--vscode-progressBar-background, #f59e0b);
+        border-right-color: var(--vscode-progressBar-background, #f59e0b);
         animation: rm-action-spin 0.7s linear infinite;
       }
-      .rm-action-ring-ready { border: 2.5px solid #22c55e; }
+      .rm-action-ring-ready {
+        border: 2.5px solid var(--vscode-debugIcon-startForeground, #22c55e);
+      }
     `;
     document.head.appendChild(style);
   }
@@ -50,7 +58,13 @@ export function ActionButton({ status, kind, onAction }: Props) {
   };
 
   return (
-    <button type="button" title={title} onClick={handleClick} style={BTN_STYLE}>
+    <button
+      type="button"
+      title={title}
+      aria-label={title}
+      onClick={handleClick}
+      style={BTN_STYLE}
+    >
       <span style={WRAP_STYLE}>{renderGlyph(status, kind)}</span>
     </button>
   );
@@ -88,7 +102,8 @@ const BTN_STYLE: CSSProperties = {
   justifyContent: 'center',
   width: 30,
   height: 30,
-  color: '#22c55e',
+  // Inherited by `<DebugIcon>` (`currentColor`) so the bug matches the play green.
+  color: ACTION_GREEN,
 };
 const WRAP_STYLE: CSSProperties = {
   position: 'relative',
@@ -101,8 +116,8 @@ const WRAP_STYLE: CSSProperties = {
 const SQUARE_STYLE: CSSProperties = {
   width: 22,
   height: 22,
-  background: '#ef4444',
+  background: ACTION_RED,
   borderRadius: 4,
 };
-const PLAY_STYLE: CSSProperties = { color: '#22c55e', fontSize: 17, lineHeight: 1 };
-const CRASH_STYLE: CSSProperties = { color: '#f59e0b', fontSize: 18, lineHeight: 1 };
+const PLAY_STYLE: CSSProperties = { color: ACTION_GREEN, fontSize: 17, lineHeight: 1 };
+const CRASH_STYLE: CSSProperties = { color: ACTION_AMBER, fontSize: 18, lineHeight: 1 };

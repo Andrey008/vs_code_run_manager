@@ -35,8 +35,37 @@ describe('ActionButton', () => {
       const btn = container.querySelector('button');
       expect(btn).not.toBeNull();
       expect(btn!.getAttribute('title')).toBe(debugTitle);
+      expect(btn!.getAttribute('aria-label')).toBe(debugTitle);
       fireEvent.click(btn!);
       expect(onAction).toHaveBeenCalledWith(intent, 'debug');
     });
   }
+});
+
+describe('ActionButton — rendered glyph', () => {
+  const noop = () => undefined;
+
+  it("stopped kind='run' renders the Play triangle", () => {
+    const { container } = render(<ActionButton status="stopped" kind="run" onAction={noop} />);
+    expect(container.textContent).toContain('▶');
+    expect(container.querySelector('svg')).toBeNull();
+  });
+
+  it("stopped kind='debug' renders the DebugIcon SVG (no triangle)", () => {
+    const { container } = render(<ActionButton status="stopped" kind="debug" onAction={noop} />);
+    expect(container.querySelector('svg')).not.toBeNull();
+    expect(container.textContent || '').not.toContain('▶');
+  });
+
+  it('crashed renders the warning glyph', () => {
+    const { container } = render(<ActionButton status="crashed" kind="run" onAction={noop} />);
+    expect(container.textContent).toContain('⚠');
+  });
+
+  it('running renders neither triangle nor warning (the red square only)', () => {
+    const { container } = render(<ActionButton status="running" kind="run" onAction={noop} />);
+    expect(container.textContent || '').not.toContain('▶');
+    expect(container.textContent || '').not.toContain('⚠');
+    expect(container.querySelector('svg')).toBeNull();
+  });
 });
