@@ -97,7 +97,7 @@ export function ServiceItem({
       )}
 
       {!showCheckbox && (
-        <>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
           {renderActionButtons(isLaunch, status, activeKind, handleAction)}
 
           <button
@@ -123,7 +123,7 @@ export function ServiceItem({
               ✕
             </button>
           )}
-        </>
+        </span>
       )}
     </div>
   );

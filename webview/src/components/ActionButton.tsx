@@ -5,7 +5,9 @@ import type { ServiceMode, ServiceStatus } from '../types';
 // Theme-aware colour roles. Resolve to VS Code theme variables at runtime; the
 // hex fallbacks only apply if the variable is absent (e.g. in jsdom tests).
 const ACTION_GREEN = 'var(--vscode-debugIcon-startForeground, #22c55e)';
-const ACTION_RED = 'var(--vscode-errorForeground, #ef4444)';
+// Vivid red instead of `--vscode-errorForeground` — the theme variable is a
+// desaturated salmon in default themes; the Stop swatch needs presence.
+const ACTION_RED = '#dc2626';
 const ACTION_AMBER = 'var(--vscode-problemsWarningIcon-foreground, #f59e0b)';
 
 // The ring CSS lives in `actionButtonStyles.ts` and is rendered once by `App`
@@ -75,8 +77,8 @@ const BTN_STYLE: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: 30,
-  height: 30,
+  width: 26,
+  height: 26,
   // Inherited by `<DebugIcon>` (`currentColor`) so the bug matches the play green.
   color: ACTION_GREEN,
 };
@@ -85,14 +87,14 @@ const WRAP_STYLE: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: 22,
-  height: 22,
+  width: 18,
+  height: 18,
 };
 const SQUARE_STYLE: CSSProperties = {
-  width: 22,
-  height: 22,
+  width: 18,
+  height: 18,
   background: ACTION_RED,
-  borderRadius: 4,
+  borderRadius: 3,
 };
-const PLAY_STYLE: CSSProperties = { color: ACTION_GREEN, fontSize: 17, lineHeight: 1 };
-const CRASH_STYLE: CSSProperties = { color: ACTION_AMBER, fontSize: 18, lineHeight: 1 };
+const PLAY_STYLE: CSSProperties = { color: ACTION_GREEN, fontSize: 14, lineHeight: 1 };
+const CRASH_STYLE: CSSProperties = { color: ACTION_AMBER, fontSize: 16, lineHeight: 1 };

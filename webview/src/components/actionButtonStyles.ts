@@ -13,12 +13,14 @@ export const ACTION_BUTTON_CSS = `
   pointer-events: none;
 }
 .rm-action-ring-spinning {
-  border: 2.5px solid transparent;
-  border-top-color: var(--vscode-progressBar-background, #f59e0b);
-  border-right-color: var(--vscode-progressBar-background, #f59e0b);
+  border: 3px solid transparent;
+  /* Vivid orange — VS Code's progressBar variable is blue in default themes,
+     which doesn't match the "in-progress" semantic the design wants. */
+  border-top-color: #f59e0b;
+  border-right-color: #f59e0b;
   animation: rm-action-spin 0.7s linear infinite;
 }
 .rm-action-ring-ready {
-  border: 2.5px solid var(--vscode-debugIcon-startForeground, #22c55e);
+  border: 3px solid var(--vscode-debugIcon-startForeground, #22c55e);
 }
 `;
