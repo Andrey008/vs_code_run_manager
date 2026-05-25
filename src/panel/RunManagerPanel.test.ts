@@ -158,6 +158,21 @@ describe('RunManagerPanel', () => {
       expect((webview.options as { enableScripts: boolean }).enableScripts).toBe(true);
     });
 
+    it('passes the script nonce through window.initialData (so App can mount nonce-scoped <style>)', () => {
+      // Regression: ActionButton spinner/ring keyframes live in actionButtonStyles.ts
+      // and are injected by App.tsx as <style nonce={nonce}>. Without nonce in
+      // initialData the <style> never renders, so the .rm-action-ring-spinning
+      // class has no rules → the orange "starting" ring is invisible in prod.
+      resolveView();
+      const webview = (provider as unknown as { _view: vscode.WebviewView })._view!.webview;
+      const cspNonce = webview.html.match(/nonce-([a-f0-9]{32})/)?.[1];
+      expect(cspNonce).toBeDefined();
+      const initialDataMatch = webview.html.match(/window\.initialData\s*=\s*(\{[^;]+\});/);
+      expect(initialDataMatch).not.toBeNull();
+      const initialData = JSON.parse(initialDataMatch![1]);
+      expect(initialData.nonce).toBe(cspNonce);
+    });
+
     it('registers the panel as a context subscription (file watcher)', () => {
       expect(context.subscriptions.length).toBeGreaterThan(0);
       expect(vscode.workspace.createFileSystemWatcher).toHaveBeenCalled();
@@ -280,13 +295,29 @@ describe('RunManagerPanel', () => {
       expect(runners.dockerRunner.start).toHaveBeenCalledWith(expect.objectContaining({ id: 'cache' }));
     });
 
-    it('applies a toggled debug mode on the next start', async () => {
+    it('carries the mode from the start message', async () => {
       resolveView();
       await ready();
-      msgHandler({ type: 'toggleMode', id: 'web', mode: 'debug' });
-      msgHandler({ type: 'start', id: 'web' });
+      msgHandler({ type: 'start', id: 'web', mode: 'debug' });
       await flush();
       expect(runners.launchRunner.start).toHaveBeenCalledWith(expect.objectContaining({ id: 'web', mode: 'debug' }));
+    });
+
+    it('startGroup launches launch services in run mode even after a prior debug click (FR-14)', async () => {
+      resolveView();
+      await ready();
+      // Prior per-service debug click sets _modes['web'] = 'debug'.
+      msgHandler({ type: 'start', id: 'web', mode: 'debug' });
+      await flush();
+      (runners.launchRunner.start as jest.Mock).mockClear();
+
+      // Start All on the group containing 'web' — FR-14: must NOT use the
+      // previously toggled debug; falls back to services.json mode (else 'run').
+      msgHandler({ type: 'startGroup', groupName: 'App' });
+      for (let i = 0; i < 3; i++) await flush();
+
+      expect(runners.launchRunner.start).not.toHaveBeenCalledWith(expect.objectContaining({ id: 'web', mode: 'debug' }));
+      expect(runners.launchRunner.start).toHaveBeenCalledWith(expect.objectContaining({ id: 'web', mode: 'run' }));
     });
   });
 

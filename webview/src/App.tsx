@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { ServiceTree } from './components/ServiceTree';
 import { ActiveTree } from './components/ActiveTree';
 import { LogTerminal } from './components/LogTerminal';
+import { ACTION_BUTTON_CSS } from './components/actionButtonStyles';
 import { postMessage } from './vscodeApi';
 import { allServiceIds, emptyLayout, toggleService } from '../../src/layout/activeLayout';
 import type { ActiveLayout, ExtensionMessage, ServiceGroup, ServiceStatus } from './types';
@@ -104,8 +105,11 @@ export function App() {
   const activeCount = activeIds.length;
   const allServices = state.groups.flatMap(g => g.services);
   const selectedService = allServices.find(s => s.id === state.selectedId);
+  const nonce = window.initialData?.nonce;
 
   return (
+    <>
+      {nonce && <style nonce={nonce}>{ACTION_BUTTON_CSS}</style>}
     <div style={{
       display: 'flex',
       flexDirection: 'column',
@@ -182,6 +186,7 @@ export function App() {
         <LogTerminal serviceId={state.selectedId} serviceType={selectedService?.type ?? null} logs={state.logs} />
       </div>
     </div>
+    </>
   );
 }
 

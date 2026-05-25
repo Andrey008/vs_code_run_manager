@@ -11,7 +11,7 @@ Run Manager gives you one side panel for every process your project needs — sh
 - **Dependency-aware start** — declare `dependsOn` and Run Manager starts a whole group in the correct topological order with one click.
 - **Health checks** — know when a service is actually *ready*, not just "process alive", via an HTTP ping or a log pattern.
 - **Embedded log terminal** — full ANSI colour, per service, powered by xterm.js.
-- **Run / Debug toggle** — launch configurations can start with the debugger attached, per service.
+- **One button per service** — a single morphing action button conveys the status (stopped / starting / running / ready / crashed) and triggers start or stop. For `launch` configurations at rest, separate Run and Debug buttons appear side by side — pick the mode at launch time.
 - **Import from JetBrains** — migrate existing JetBrains run/debug configurations into Run Manager with one command, or accept the prompt shown when you open a JetBrains project.
 
 ## Getting started

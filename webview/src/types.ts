@@ -33,12 +33,11 @@ export type ExtensionMessage =
   | { type: 'crashed'; id: string; exitCode: number };
 
 export type WebviewMessage =
-  | { type: 'start'; id: string }
+  | { type: 'start'; id: string; mode?: ServiceMode }
   | { type: 'stop'; id: string }
   | { type: 'restart'; id: string }
   | { type: 'startGroup'; groupName: string }
   | { type: 'startServices'; ids: string[] }
-  | { type: 'toggleMode'; id: string; mode: ServiceMode }
   | { type: 'saveLayout'; layout: ActiveLayout }
   | { type: 'requestLogs'; id: string }
   | { type: 'showTerminal'; id: string }
