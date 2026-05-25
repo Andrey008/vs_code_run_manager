@@ -96,6 +96,12 @@ service started in debug mode.
   carries a textual tooltip naming the current state and the action it performs.
 - **Restart**: the Restart control stays available and separate; it is never folded
   into the morphing button.
+- **Webview reload while running**: when the panel re-opens (or the extension host
+  restarts) while a `launch` service is `running` or `ready`, the row re-derives
+  which action button to show from the service's `services.json` `mode` field
+  (defaulting to `run`). The actual debug session is unaffected; the row's button
+  may visually show `run` even when the service was originally started in debug —
+  this is an accepted limitation of not persisting per-launch mode.
 
 ## Requirements *(mandatory)*
 

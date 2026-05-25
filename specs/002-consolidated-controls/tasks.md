@@ -108,7 +108,8 @@ button shows while running; stop, verify both reappear.
 
 - [ ] T016 [P] Add an `## [Unreleased]` entry in `CHANGELOG.md` for the Consolidated controls feature (Keep a Changelog format)
 - [ ] T017 [P] Update `README.md` — mention the morphing action button and the run/debug two-button layout for `launch` services
-- [ ] T018 Run quickstart validation per `quickstart.md` — `npm test` (both Jest projects green), `npm run lint`, `npm run build`, and the F5 Extension Development Host manual check
+- [ ] T018 [P] Add a unit test in `src/panel/RunManagerPanel.test.ts` asserting `startGroup` launches `launch` services with `mode: 'run'` (or the `services.json` `mode` default), per FR-014
+- [ ] T019 Run quickstart validation per `quickstart.md` — `npm test` (both Jest projects green), `npm run lint`, `npm run build`, and the F5 Extension Development Host manual check
 
 ---
 
@@ -140,7 +141,7 @@ button shows while running; stop, verify both reappear.
 - T007, T008 (US1 tests) run in parallel.
 - T009 runs in parallel with the US1 tests; T010 → T011 → T012 are sequential.
 - T013, T014 (US2 tests) run in parallel.
-- T016, T017 (polish docs) run in parallel.
+- T016, T017, T018 (polish: docs + startGroup test) run in parallel; T019 (validation) runs last.
 
 ---
 
