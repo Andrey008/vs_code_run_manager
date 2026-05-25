@@ -97,7 +97,7 @@ export function ServiceItem({
       )}
 
       {!showCheckbox && (
-        <span style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '1px' }}>
           {renderActionButtons(isLaunch, status, activeKind, handleAction)}
 
           <button
@@ -160,14 +160,14 @@ function iconBtnStyle(color: string): CSSProperties {
     border: 'none',
     color,
     cursor: 'pointer',
-    fontSize: '16px',
-    padding: '2px 4px',
+    fontSize: '13px',
+    padding: '2px 3px',
     lineHeight: 1,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: '3px',
-    minWidth: '22px',
-    minHeight: '22px',
+    minWidth: '18px',
+    minHeight: '18px',
   };
 }

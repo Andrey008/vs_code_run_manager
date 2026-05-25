@@ -77,8 +77,8 @@ const BTN_STYLE: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: 26,
-  height: 26,
+  width: 22,
+  height: 22,
   // Inherited by `<DebugIcon>` (`currentColor`) so the bug matches the play green.
   color: ACTION_GREEN,
 };
@@ -87,14 +87,14 @@ const WRAP_STYLE: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: 18,
-  height: 18,
+  width: 14,
+  height: 14,
 };
 const SQUARE_STYLE: CSSProperties = {
-  width: 18,
-  height: 18,
+  width: 14,
+  height: 14,
   background: ACTION_RED,
   borderRadius: 3,
 };
-const PLAY_STYLE: CSSProperties = { color: ACTION_GREEN, fontSize: 14, lineHeight: 1 };
-const CRASH_STYLE: CSSProperties = { color: ACTION_AMBER, fontSize: 16, lineHeight: 1 };
+const PLAY_STYLE: CSSProperties = { color: ACTION_GREEN, fontSize: 12, lineHeight: 1 };
+const CRASH_STYLE: CSSProperties = { color: ACTION_AMBER, fontSize: 14, lineHeight: 1 };

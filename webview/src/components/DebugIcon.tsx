@@ -8,7 +8,7 @@ interface Props {
  * Minimal-bug SVG used as the debug action's at-rest glyph.
  * Colour inherits via `currentColor` so the button's `color` drives the bug colour.
  */
-export function DebugIcon({ size = 16, spotColor = 'var(--vscode-editor-background, #2a2d2e)' }: Props) {
+export function DebugIcon({ size = 14, spotColor = 'var(--vscode-editor-background, #2a2d2e)' }: Props) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} fill="none" aria-hidden="true">
       <rect x="7" y="7.5" width="10" height="13" rx="5" fill="currentColor" />
