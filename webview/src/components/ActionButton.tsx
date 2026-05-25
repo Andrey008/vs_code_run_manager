@@ -17,13 +17,21 @@ interface Props {
   status: ServiceStatus;
   kind: 'run' | 'debug';
   onAction: (intent: 'start' | 'stop', mode: ServiceMode) => void;
+  /**
+   * When true and the service is `crashed`, render the kind glyph (Play or
+   * Bug) in amber instead of the universal ⚠. Used by the `launch` two-button
+   * pair so a crashed launch service shows symmetric retry buttons rather
+   * than `⚠ ⚠`.
+   */
+  inLaunchPair?: boolean;
 }
 
 /**
  * The morphing action button. Its appearance is a pure function of
- * `status` × `kind`; clicking it emits the implied action.
+ * `status` × `kind` (× `inLaunchPair` for the crashed-launch case);
+ * clicking it emits the implied action.
  */
-export function ActionButton({ status, kind, onAction }: Props) {
+export function ActionButton({ status, kind, onAction, inLaunchPair = false }: Props) {
   const intent: 'start' | 'stop' =
     status === 'stopped' || status === 'crashed' ? 'start' : 'stop';
   const debugSuffix = intent === 'start' && kind === 'debug' ? ' (debug)' : '';
@@ -42,13 +50,28 @@ export function ActionButton({ status, kind, onAction }: Props) {
       onClick={handleClick}
       style={BTN_STYLE}
     >
-      <span style={WRAP_STYLE}>{renderGlyph(status, kind)}</span>
+      <span style={WRAP_STYLE}>{renderGlyph(status, kind, inLaunchPair)}</span>
     </button>
   );
 }
 
-function renderGlyph(status: ServiceStatus, kind: 'run' | 'debug'): ReactNode {
+function renderGlyph(
+  status: ServiceStatus,
+  kind: 'run' | 'debug',
+  inLaunchPair: boolean,
+): ReactNode {
   if (status === 'crashed') {
+    if (inLaunchPair) {
+      // Symmetric "retry in this mode" — shape tells you the mode, colour
+      // tells you the last run crashed.
+      return kind === 'debug' ? (
+        <span style={DEBUG_AMBER_STYLE}>
+          <DebugIcon />
+        </span>
+      ) : (
+        <span style={PLAY_AMBER_STYLE}>▶</span>
+      );
+    }
     return <span style={CRASH_STYLE}>⚠</span>;
   }
   if (status === 'stopped') {
@@ -98,3 +121,5 @@ const SQUARE_STYLE: CSSProperties = {
 };
 const PLAY_STYLE: CSSProperties = { color: ACTION_GREEN, fontSize: 12, lineHeight: 1 };
 const CRASH_STYLE: CSSProperties = { color: ACTION_AMBER, fontSize: 14, lineHeight: 1 };
+const PLAY_AMBER_STYLE: CSSProperties = { color: ACTION_AMBER, fontSize: 12, lineHeight: 1 };
+const DEBUG_AMBER_STYLE: CSSProperties = { color: ACTION_AMBER, display: 'inline-flex', lineHeight: 1 };

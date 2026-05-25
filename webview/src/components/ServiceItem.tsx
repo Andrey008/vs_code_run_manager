@@ -140,11 +140,13 @@ function renderActionButtons(
     return <ActionButton status={status} kind="run" onAction={onAction} />;
   }
   // Launch services at rest: two buttons (run + debug) — pick at launch time.
+  // `inLaunchPair` makes a `crashed` button show its kind glyph in amber
+  // instead of the universal ⚠ — avoids a confusing "⚠ ⚠" row.
   if (status === 'stopped' || status === 'crashed') {
     return (
       <>
-        <ActionButton status={status} kind="run" onAction={onAction} />
-        <ActionButton status={status} kind="debug" onAction={onAction} />
+        <ActionButton status={status} kind="run" onAction={onAction} inLaunchPair />
+        <ActionButton status={status} kind="debug" onAction={onAction} inLaunchPair />
       </>
     );
   }

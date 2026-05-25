@@ -57,9 +57,23 @@ describe('ActionButton — rendered glyph', () => {
     expect(container.textContent || '').not.toContain('▶');
   });
 
-  it('crashed renders the warning glyph', () => {
+  it('crashed renders the warning glyph (non-launch case)', () => {
     const { container } = render(<ActionButton status="crashed" kind="run" onAction={noop} />);
     expect(container.textContent).toContain('⚠');
+  });
+
+  it("crashed with inLaunchPair renders the kind glyph in amber, not ⚠", () => {
+    const { container: runContainer } = render(
+      <ActionButton status="crashed" kind="run" onAction={noop} inLaunchPair />,
+    );
+    expect(runContainer.textContent).toContain('▶');
+    expect(runContainer.textContent || '').not.toContain('⚠');
+
+    const { container: debugContainer } = render(
+      <ActionButton status="crashed" kind="debug" onAction={noop} inLaunchPair />,
+    );
+    expect(debugContainer.querySelector('svg')).not.toBeNull();
+    expect(debugContainer.textContent || '').not.toContain('⚠');
   });
 
   it('running renders neither triangle nor warning (the red square only)', () => {
