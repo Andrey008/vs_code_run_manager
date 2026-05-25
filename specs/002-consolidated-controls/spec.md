@@ -8,6 +8,13 @@
 
 **Input**: User description: "Replace the per-service control 'garland' (status badge + Start + Stop + run/debug toggle) with a single morphing action button whose shape and ring convey the service status. launch services show a run button plus a custom debug icon at rest, with no mode switcher."
 
+## Clarifications
+
+### Session 2026-05-25
+
+- Q: When "Start All" launches a group containing `launch` services (the mode toggle is gone), in which mode does each launch service start? → A: Always run mode. Debug stays opt-in — to debug a launch service, click its debug button.
+- Q: Is the Restart button visible in the `stopped` / `crashed` state, where clicking it is equivalent to the action button? → A: Yes — always visible regardless of state, for layout stability.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Read a service's state at a glance (Priority: P1)
@@ -105,8 +112,9 @@ service started in debug mode.
 - **FR-005**: Clicking the action button MUST perform the appropriate action — start
   the service when it is stopped or crashed, stop it otherwise.
 - **FR-006**: The standalone text status badge MUST be removed from the service row.
-- **FR-007**: A Restart control MUST remain available for every service as a separate,
-  always-visible button.
+- **FR-007**: A Restart control MUST be present for every service as a separate,
+  always-visible button — visible in **every** status (including `stopped` and
+  `crashed`) so the row's layout stays stable as the service's state changes.
 - **FR-008**: A `launch`-type service at rest MUST offer a run option and a debug
   option, with no separate run/debug mode switcher.
 - **FR-009**: While a `launch`-type service is not stopped, only the active action
@@ -120,6 +128,9 @@ service started in debug mode.
   state and the action it performs.
 - **FR-013**: The debug option MUST be presented with a custom debug icon, not a
   generic emoji.
+- **FR-014**: A group "Start All" action MUST launch every `launch`-type service in
+  the group in **run** mode. Debug launches stay opt-in — initiated by clicking a
+  service's debug option, not by the group action.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -150,7 +161,7 @@ service started in debug mode.
 - The five service statuses (stopped, starting, running, ready, crashed) are the
   existing status model and are not changed by this feature.
 - Run/debug mode is chosen at launch time and is not persisted as a toggle state.
-- "Start All" for a group launches each `launch` service in run mode unless a default
-  is otherwise configured.
+- "Start All" for a group launches every `launch` service in run mode; debug remains
+  opt-in via the per-service debug button (clarified 2026-05-25).
 - Group-level controls ("Start All" / "Stop All") and the "+ New group" placement are
   out of scope — they are tracked separately as future features.
