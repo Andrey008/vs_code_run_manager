@@ -63,3 +63,65 @@ describe('ServiceItem — non-launch (US1)', () => {
     expect(container.querySelectorAll('button').length).toBe(0);
   });
 });
+
+const LAUNCH: ServiceConfig = { id: 'web', name: 'Web', type: 'launch' };
+
+describe('ServiceItem — launch (US2)', () => {
+  beforeEach(() => resetPostedMessages());
+
+  it('at stopped, renders two ActionButtons (run + debug) plus Restart', () => {
+    const { container } = render(<ServiceItem service={LAUNCH} status="stopped" {...baseProps} />);
+    // 2 actions + 1 restart
+    expect(container.querySelectorAll('button').length).toBe(3);
+    expect(container.querySelector('button[title="stopped — click to start"]')).not.toBeNull();
+    expect(container.querySelector('button[title="stopped — click to start (debug)"]')).not.toBeNull();
+  });
+
+  it('at crashed, also renders both kinds plus Restart', () => {
+    const { container } = render(<ServiceItem service={LAUNCH} status="crashed" {...baseProps} />);
+    expect(container.querySelectorAll('button').length).toBe(3);
+    expect(container.querySelector('button[title="crashed — click to start"]')).not.toBeNull();
+    expect(container.querySelector('button[title="crashed — click to start (debug)"]')).not.toBeNull();
+  });
+
+  it('when not stopped (no prior click), renders only one ActionButton (run fallback)', () => {
+    const { container } = render(<ServiceItem service={LAUNCH} status="running" {...baseProps} />);
+    // 1 action + 1 restart
+    expect(container.querySelectorAll('button').length).toBe(2);
+    expect(container.querySelector('button[title="running — click to stop"]')).not.toBeNull();
+  });
+
+  it('clicking debug at stopped posts start with mode debug', () => {
+    const { container } = render(<ServiceItem service={LAUNCH} status="stopped" {...baseProps} />);
+    fireEvent.click(container.querySelector('button[title="stopped — click to start (debug)"]')!);
+    expect(postedMessages).toEqual([{ type: 'start', id: 'web', mode: 'debug' }]);
+  });
+
+  it('clicking run at stopped posts start with mode run', () => {
+    const { container } = render(<ServiceItem service={LAUNCH} status="stopped" {...baseProps} />);
+    fireEvent.click(container.querySelector('button[title="stopped — click to start"]')!);
+    expect(postedMessages).toEqual([{ type: 'start', id: 'web', mode: 'run' }]);
+  });
+
+  it('after clicking debug then transitioning to running, only the active button remains', () => {
+    const { container, rerender } = render(
+      <ServiceItem service={LAUNCH} status="stopped" {...baseProps} />,
+    );
+    fireEvent.click(container.querySelector('button[title="stopped — click to start (debug)"]')!);
+    rerender(<ServiceItem service={LAUNCH} status="running" {...baseProps} />);
+    // 1 action + 1 restart — second button (run) hidden while not stopped
+    expect(container.querySelectorAll('button').length).toBe(2);
+    expect(container.querySelector('button[title="running — click to stop"]')).not.toBeNull();
+  });
+
+  it('when status returns to stopped, both buttons reappear', () => {
+    const { container, rerender } = render(
+      <ServiceItem service={LAUNCH} status="stopped" {...baseProps} />,
+    );
+    fireEvent.click(container.querySelector('button[title="stopped — click to start (debug)"]')!);
+    rerender(<ServiceItem service={LAUNCH} status="running" {...baseProps} />);
+    expect(container.querySelectorAll('button').length).toBe(2);
+    rerender(<ServiceItem service={LAUNCH} status="stopped" {...baseProps} />);
+    expect(container.querySelectorAll('button').length).toBe(3);
+  });
+});

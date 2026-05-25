@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { CSSProperties } from 'react';
 import { ActionButton } from './ActionButton';
 import { postMessage } from '../vscodeApi';
@@ -26,9 +27,13 @@ export function ServiceItem({
   onRemove,
 }: Props) {
   const isLaunch = service.type === 'launch';
+  const [activeKind, setActiveKind] = useState<'run' | 'debug' | null>(null);
 
   const handleAction = (intent: 'start' | 'stop', mode: ServiceMode) => {
     if (intent === 'start') {
+      // Remember which kind launched this — drives the single-button display
+      // while the service is not stopped.
+      if (isLaunch) setActiveKind(mode);
       postMessage(
         isLaunch
           ? { type: 'start', id: service.id, mode }
@@ -85,7 +90,7 @@ export function ServiceItem({
 
       {!showCheckbox && (
         <>
-          <ActionButton status={status} kind="run" onAction={handleAction} />
+          {renderActionButtons(isLaunch, status, activeKind, handleAction)}
 
           <button
             title="Restart"
@@ -114,6 +119,31 @@ export function ServiceItem({
       )}
     </div>
   );
+}
+
+function renderActionButtons(
+  isLaunch: boolean,
+  status: ServiceStatus,
+  activeKind: 'run' | 'debug' | null,
+  onAction: (intent: 'start' | 'stop', mode: ServiceMode) => void,
+) {
+  // Non-launch services: a single morphing action button.
+  if (!isLaunch) {
+    return <ActionButton status={status} kind="run" onAction={onAction} />;
+  }
+  // Launch services at rest: two buttons (run + debug) — pick at launch time.
+  if (status === 'stopped' || status === 'crashed') {
+    return (
+      <>
+        <ActionButton status={status} kind="run" onAction={onAction} />
+        <ActionButton status={status} kind="debug" onAction={onAction} />
+      </>
+    );
+  }
+  // Launch services not stopped: only the active button is shown. `null` (e.g.
+  // after a webview reload while the service is running) falls back to `run`
+  // — documented edge case in spec.md.
+  return <ActionButton status={status} kind={activeKind ?? 'run'} onAction={onAction} />;
 }
 
 function iconBtnStyle(color: string): CSSProperties {

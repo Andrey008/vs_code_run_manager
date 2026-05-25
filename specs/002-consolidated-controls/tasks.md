@@ -91,12 +91,12 @@ button shows while running; stop, verify both reappear.
 
 ### Tests for User Story 2 ⚠️ (write first, confirm they FAIL)
 
-- [ ] T013 [P] [US2] Extend `webview/src/components/ServiceItem.test.tsx` for `launch` services — at `status='stopped'` and `'crashed'` two `ActionButton`s render (one `kind='run'`, one `kind='debug'`); while `status` is not stopped, only the active button is rendered; both reappear when status returns to `stopped`
-- [ ] T014 [P] [US2] Click tests in `webview/src/components/ServiceItem.test.tsx` — clicking the debug `ActionButton` on a `launch` service posts `{ type: 'start', id, mode: 'debug' }`; clicking run posts `{ type: 'start', id, mode: 'run' }`
+- [X] T013 [P] [US2] Extend `webview/src/components/ServiceItem.test.tsx` for `launch` services — at `status='stopped'` and `'crashed'` two `ActionButton`s render (one `kind='run'`, one `kind='debug'`); while `status` is not stopped, only the active button is rendered; both reappear when status returns to `stopped`
+- [X] T014 [P] [US2] Click tests in `webview/src/components/ServiceItem.test.tsx` — clicking the debug `ActionButton` on a `launch` service posts `{ type: 'start', id, mode: 'debug' }`; clicking run posts `{ type: 'start', id, mode: 'run' }`
 
 ### Implementation for User Story 2
 
-- [ ] T015 [US2] Extend `webview/src/components/ServiceItem.tsx` — for `launch` services render run + debug `ActionButton`s at rest; track local "active kind" state (which button was last clicked); while not stopped, render only the active button; both reappear on return to `stopped`; non-`launch` services keep the single-button rendering from US1 (depends on T011)
+- [X] T015 [US2] Extend `webview/src/components/ServiceItem.tsx` — for `launch` services render run + debug `ActionButton`s at rest; track local "active kind" state (which button was last clicked); while not stopped, render only the active button; both reappear on return to `stopped`; non-`launch` services keep the single-button rendering from US1 (depends on T011)
 
 **Checkpoint**: Run and debug for `launch` services both work without a mode switcher.
 
