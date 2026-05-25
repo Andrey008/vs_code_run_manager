@@ -78,18 +78,32 @@ function renderGlyph(
     return kind === 'debug' ? <DebugIcon /> : <span style={PLAY_STYLE}>▶</span>;
   }
   // starting / running / ready — red square, with an optional ring layered on top.
-  const ringClass =
-    status === 'starting'
-      ? 'rm-action-ring rm-action-ring-spinning'
-      : status === 'ready'
-        ? 'rm-action-ring rm-action-ring-ready'
-        : '';
-  return (
-    <>
-      {ringClass && <span className={ringClass} />}
-      <span style={SQUARE_STYLE} />
-    </>
-  );
+  if (status === 'starting') {
+    return (
+      <>
+        <span className="rm-action-ring">
+          {Array.from({ length: 8 }, (_, i) => (
+            <span
+              key={i}
+              className="rm-action-tick"
+              style={{ ['--i' as string]: i } as CSSProperties}
+            />
+          ))}
+        </span>
+        <span style={SQUARE_STYLE} />
+      </>
+    );
+  }
+  if (status === 'ready') {
+    return (
+      <>
+        <span className="rm-action-ring rm-action-ring-ready" />
+        <span style={SQUARE_STYLE} />
+      </>
+    );
+  }
+  // running — just the red square, no ring.
+  return <span style={SQUARE_STYLE} />;
 }
 
 const BTN_STYLE: CSSProperties = {
